@@ -7,19 +7,21 @@ pipeline {
     stages {
         stage('Integration Tests') {
             steps {
-                script {
-                    def tagsOption = TAGS?.trim() ? "-Dcucumber.filter.tags=\"${TAGS.trim()}\"" : ""
+               script {
+                   def tagsOption = TAGS?.trim() ? "-Dcucumber.filter.tags=\"${TAGS.trim()}\"" : ""
 
-                    // Comando para lanzar un contenedor hermano en el host
-                    sh """
-                        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-                          -v "\$(pwd)":/usr/src/app \
-                          -v maven-repo:/root/.m2 \
-                          -w /usr/src/app \
-                          maven:3.8.8-eclipse-temurin-17 \
-                          mvn clean verify -Denvironment=${ENVIRONMENT} ${tagsOption} -B -ntp
-                    """
-                }
+                   // Convertimos la ruta /var/jenkins_home al volumen real del host 'jenkins_home_data'
+                   def hostWorkspace = WORKSPACE.replace('/var/jenkins_home', 'jenkins_home_data')
+
+                   sh """
+                       docker run --rm \
+                         -v ${hostWorkspace}:/usr/src/app \
+                         -v maven-repo:/root/.m2 \
+                         -w /usr/src/app \
+                         maven:3.8.8-eclipse-temurin-17 \
+                         mvn clean verify -Denvironment=${ENVIRONMENT} ${tagsOption} -B -ntp
+                   """
+               }
             }
             post {
                 always {
