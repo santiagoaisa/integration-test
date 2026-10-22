@@ -29,7 +29,7 @@ public class PetTypesDefinitions {
     @Before
     public void setup(){
         enviromentVariables= SystemEnvironmentVariables.createEnvironmentVariables();
-        BASE_PATH = EnvironmentSpecificConfiguration.from(enviromentVariables).getProperty("environments.default.base.uri");
+        BASE_PATH = EnvironmentSpecificConfiguration.from(enviromentVariables).getProperty("base.uri");
         RestAssured.baseURI = BASE_PATH;
     }
 
