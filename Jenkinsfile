@@ -7,9 +7,12 @@ pipeline {
     stages {
         stage('Integration Tests') {
             steps {
+                sh 'chmod +x mvnw'
+
+
                 script {
                     def tagsOption = TAGS?.trim() ? "-Dcucumber.filter.tags='${TAGS}'" : ""
-                    sh "docker run --rm -v ${WORKSPACE}:/usr/src/app -w /usr/src/app maven:3.8.8-eclipse-temurin-17 mvn clean verify -Denvironment=${ENVIRONMENT} ${tagsOption} -B -ntp"
+                    sh "./mvnw clean verify -Denvironment=${ENVIRONMENT} ${tagsOption} -B -ntp"
                 }
             }
             post {
