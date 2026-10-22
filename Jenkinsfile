@@ -37,3 +37,7 @@ pipeline {
         }
     }
 }
+
+//PARA HABILITAR JAVASCRIPT EN JENKIS DE MANERA ETEMPORAL
+//EJECUTAR EN SU CONSOLA DE SCRIPTS
+//System.setProperty("hudson.model.DirectoryBrowserSupport.CSP","")
